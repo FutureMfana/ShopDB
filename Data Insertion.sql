@@ -19,3 +19,26 @@ BEGIN CATCH
 	ROLLBACK TRANSACTION;
 END CATCH
 GO
+
+--Procedure for inserting data into Products table
+CREATE PROC spInsertProducts
+	@Product varchar(50),
+	@CategoryID int,
+	@ManufucturerID int
+WITH ENCRYPTION
+AS
+BEGIN
+	BEGIN TRY
+		BEGIN TRAN
+			INSERT INTO Products.Products (ProductName, CategoryID, ManufacturerID)
+			VALUES (@Product, @CategoryID, @ManufucturerID)
+			SELECT TOP 10 *
+			FROM Products.Products
+		COMMIT TRAN
+	END TRY
+	BEGIN CATCH
+		SELECT ERROR_MESSAGE();
+		ROLLBACK TRAN;
+	END CATCH
+END
+GO
