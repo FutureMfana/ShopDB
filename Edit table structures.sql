@@ -1,7 +1,7 @@
 USE ShopDB;
 GO
 
---Adding description column for Products table
+--Adding description column for Category table
 ALTER TABLE Products.Category
 ADD Description varchar(100);
 GO
