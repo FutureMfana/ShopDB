@@ -42,3 +42,28 @@ BEGIN
 	END CATCH
 END
 GO
+
+--Inserting data to Manufacture table
+CREATE PROC spInsertManufacturer
+	@Manufacturer nvarchar(50),
+	@Address varchar(30),
+	@Country varchar(30),
+	@City varchar(30),
+	@PostalCode varchar(30),
+	@Tel char(10)
+WITH ENCRYPTION
+AS
+BEGIN
+	BEGIN TRY
+		BEGIN TRAN
+			INSERT INTO Products.Manufacturer (Manufacturer, PhysicalAddress, City, Country, PostalCode, Tel)
+			VALUES (@Manufacturer, @Address, @City, @Country, @PostalCode, @Tel);
+		COMMIT TRAN
+		SELECT TOP 10 * 
+		FROM Products.Category ;
+	END TRY
+	BEGIN CATCH
+		PRINT ERROR_MESSAGE();
+		ROLLBACK TRAN;
+	END CATCH
+END
