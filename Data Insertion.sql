@@ -97,3 +97,31 @@ BEGIN
 		ROLLBACK TRAN;
 	END CATCH
 END
+
+--Altering spInsertEmployees procedure to add default value for ManagerID field
+ALTER PROC spInsertEmployees
+	@FirstName nvarchar(30),
+	@LastName nvarchar(30),
+	@IDNumber char(13),
+	@DOB date,
+	@Gender bit,
+	@Position nvarchar(30),
+	@ManagerID int = Null,
+	@Salary decimal(18,2)
+WITH ENCRYPTION
+AS
+BEGIN
+	BEGIN TRY
+		BEGIN TRAN
+			INSERT INTO Staff.Employees (FirstName, LastName, IDNumber, DOB, Gender, Position, ManagerID, Salary)
+			VALUES (@FirstName, @LastName, @IDNumber, @DOB, @Gender, @Position, @ManagerID, @Salary);
+		COMMIT TRAN
+		SELECT TOP 10 *
+		FROM Staff.Employees
+		ORDER BY EmpID DESC;
+	END TRY
+	BEGIN CATCH
+		PRINT ERROR_MESSAGE();
+		ROLLBACK TRAN;
+	END CATCH
+END
