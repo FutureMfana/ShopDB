@@ -136,3 +136,37 @@ EXEC spInsertEmployees
 	@Position = 'Director',
 	@Salary = 450000
 GO
+
+--Stored procedure for inserting Dependents entity instance
+CREATE PROC spInsertDependents
+	@FirstName nvarchar(30),
+	@LastName nvarchar(30),
+	@IDNumber char(13),
+	@Gender bit,
+	@EmpID int
+WITH ENCRYPTION
+AS
+BEGIN
+	BEGIN TRY
+		BEGIN TRAN
+			INSERT INTO Staff.Dependents (FirstName, LastName, IDNumber, Gender, EmpID)
+			VALUES (@FirstName, @LastName, @IDNumber, @Gender, @EmpID)
+		COMMIT TRAN
+		SElECT TOP 10 *
+		FROM Staff.Dependents
+		ORDER BY DependentID DESC;
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRAN;
+		PRINT ERROR_MESSAGE();
+	END CATCH
+END
+
+--Invoking spDepents stored procedure
+EXEC spInsertDependents
+	@FirstName = 'Andrew',
+	@LastName = 'Nancy',
+	@IDNumber = '1502120135082',
+	@Gender = 1,
+	@EmpID = 1000
+GO
