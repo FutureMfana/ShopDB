@@ -20,6 +20,26 @@ BEGIN CATCH
 END CATCH
 GO
 
+--Stored procedure for inserting Dependents entity instance
+CREATE PROC spInsertCategory
+	@Category nvarchar(30),
+	@Description nvarchar(100) = Null
+WITH ENCRYPTION
+AS
+BEGIN
+	BEGIN TRY
+		BEGIN TRAN
+			INSERT INTO Products.Category (Category, Description)
+			VALUES (@Category, @Description)
+		COMMIT TRAN
+		SELECT TOP 10 *
+		FROM Products.Category
+		ORDER BY CategoryID DESC;
+	END TRY
+	BEGIN CATCH
+	END CATCH
+END
+
 --Procedure for inserting data into Products table
 CREATE PROC spInsertProducts
 	@Product varchar(50),
