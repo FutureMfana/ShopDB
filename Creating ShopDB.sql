@@ -12,7 +12,8 @@ CREATE TABLE Staff.Employees(
 	LastName varchar(20) NOT NULL,
 	IDNumber char(13) UNIQUE NOT NULL,
 	DOB date NOT NULL,
-	Gender bit NOT NULL,
+	Gender bit NOT NULL ,
+	--1 for Male and 0 for Female
 	Position varchar(20) NOT NULL,
 	ManagerID int, 
 	CONSTRAINT FK_EMP_CustID FOREIGN KEY (EmpID) REFERENCES Staff.Employees(EmpID)
@@ -25,6 +26,7 @@ CREATE TABLE Staff.Dependents(
 	LastName varchar(20) NOT NULL,
 	IDNumber char(13) NOT NULL,
 	Gender bit NOT NULL,
+	--1 for Male, 0 for Female
 	EmpID int NOT NULL,
 	CONSTRAINT FK_EMP_EmpID FOREIGN KEY (EmpID) REFERENCES Staff.Employees(EmpID)
 );
@@ -39,6 +41,7 @@ CREATE TABLE Customer.Customers(
 	LastName varchar(20) NOT NULL,
 	IDNumber char(13) NOT NULL,
 	Gender bit NOT NULL,
+	--1 for Male, 0 for Female
 	EmailAddress varchar(30) NOT NULL,
 	ResidentialAddres varchar(max) NOT NULL
 );
