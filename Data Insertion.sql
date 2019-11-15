@@ -31,9 +31,10 @@ BEGIN
 	BEGIN TRY
 		BEGIN TRAN
 			INSERT INTO Products.Products (ProductName, CategoryID, ManufacturerID)
-			VALUES (@Product, @CategoryID, @ManufucturerID)
+			VALUES (@Product, @CategoryID, @ManufucturerID);
 			SELECT TOP 10 *
 			FROM Products.Products
+			ORDER BY ProductID DESC;
 		COMMIT TRAN
 	END TRY
 	BEGIN CATCH
@@ -60,7 +61,36 @@ BEGIN
 			VALUES (@Manufacturer, @Address, @City, @Country, @PostalCode, @Tel);
 		COMMIT TRAN
 		SELECT TOP 10 * 
-		FROM Products.Category ;
+		FROM Products.Category
+		ORDER BY ManufacturerID DESC;
+	END TRY
+	BEGIN CATCH
+		PRINT ERROR_MESSAGE();
+		ROLLBACK TRAN;
+	END CATCH
+END
+
+--Stored Procedure for adding employee entity instance
+CREATE PROC spInsertEmployees
+	@FirstName nvarchar(30),
+	@LastName nvarchar(30),
+	@IDNumber char(13),
+	@DOB date,
+	@Gender bit,
+	@Position nvarchar(30),
+	@ManagerID int,
+	@Salary decimal(18,2)
+WITH ENCRYPTION
+AS
+BEGIN
+	BEGIN TRY
+		BEGIN TRAN
+			INSERT INTO Staff.Employees (FirstName, LastName, IDNumber, DOB, Gender, Position, ManagerID, Salary)
+			VALUES (@FirstName, @LastName, @IDNumber, @DOB, @Gender, @Position, @ManagerID, @Salary);
+		COMMIT TRAN
+		SELECT TOP 10 *
+		FROM Staff.Employees
+		ORDER BY EmpID DESC;
 	END TRY
 	BEGIN CATCH
 		PRINT ERROR_MESSAGE();
