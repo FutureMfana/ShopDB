@@ -125,3 +125,14 @@ BEGIN
 		ROLLBACK TRAN;
 	END CATCH
 END
+
+--Demonstration on invoking spsInsertEmployees
+EXEC spInsertEmployees 
+	@FirstName = 'Davolio',
+	@LastName = 'Nancy',
+	@IDNumber = '6812085553086',
+	@DOB = '1968-12-08',
+	@Gender = 1,
+	@Position = 'Director',
+	@Salary = 450000
+GO
