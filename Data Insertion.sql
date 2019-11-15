@@ -219,3 +219,50 @@ BEGIN
 	END CATCH
 END
 GO
+
+CREATE PROC spInsertOrders
+	@OrderDate date = GETDATE,
+	@TotalPrice decimal(18,2),
+	@EmpID int,
+	@CustID int
+WITH ENCRYPTION
+AS
+BEGIN
+	BEGIN TRY
+		BEGIN COMMIT --This was suppose to be BEGIN TRAN instead of BEGIN COMMIT
+			INSERT INTO Sales.Orders (OrderDate, TotalPrice, EmpID, CustID)
+			VALUES (@OrderDate, @TotalPrice, @EmpID, @CustID)
+		END COMMIT
+		COMMIT TRAN
+		SELECT TOP 10 *
+		FROM Sales.Orders
+		ORDER BY OrderID DESC;
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRAN;
+		PRINT ERROR_MESSAGE();
+	END CATCH
+END
+GO
+
+CREATE PROC spInsertOrderDetails
+	@OrderID int,
+	@ProductID int,
+	@QTY int,
+	@TotalPrice decimal(18, 2),
+	@CategoryID int
+WITH ENCRYPTION
+AS
+BEGIN
+	BEGIN TRY
+		BEGIN TRAN
+			INSERT INTO Sales.OrderDetials (OrderID, ProductID, QTY, TotalPrice, CategoryID)
+			VALUES (@OrderID, @ProductID, @QTY, @TotalPrice, @CategoryID);
+		COMMIT TRAN
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRAN;
+		PRINT ERROR_MESSAGE();
+	END CATCH
+END
+GO
