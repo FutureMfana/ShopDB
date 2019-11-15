@@ -39,6 +39,7 @@ BEGIN
 	BEGIN CATCH
 	END CATCH
 END
+GO
 
 --Procedure for inserting data into Products table
 CREATE PROC spInsertProducts
@@ -145,6 +146,7 @@ BEGIN
 		ROLLBACK TRAN;
 	END CATCH
 END
+GO
 
 --Demonstration on invoking spsInsertEmployees
 EXEC spInsertEmployees 
@@ -181,6 +183,7 @@ BEGIN
 		PRINT ERROR_MESSAGE();
 	END CATCH
 END
+GO
 
 --Invoking spDepents stored procedure
 EXEC spInsertDependents
@@ -189,4 +192,30 @@ EXEC spInsertDependents
 	@IDNumber = '1502120135082',
 	@Gender = 1,
 	@EmpID = 1000
+GO
+
+CREATE PROC spInsertCustomers
+	@FirstName nvarchar(30),
+	@LastName nvarchar(30),
+	@IDNumber char(13),
+	@Gender bit,
+	@EmailAddress nvarchar(30),
+	@ResidentialAddres nvarchar(max)
+WITH ENCRYPTION
+AS
+BEGIN
+	BEGIN TRY
+		BEGIN TRAN
+			INSERT INTO Customer.Customers (FirstName, LastName, IDNumber, Gender, EmailAddress, ResidentialAddres)
+			VALUES (@FirstName, @LastName, @IDNumber, @Gender, @EmailAddress, @ResidentialAddres)
+		COMMIT TRAN
+		SELECT TOP 10 *
+		FROM Customer.Customers
+		ORDER BY CustID DESC;
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRAN;
+		PRINT ERROR_MESSAGE();
+	END CATCH
+END
 GO
