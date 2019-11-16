@@ -13,7 +13,7 @@ GO
 CREATE VIEW Customer.AllCustomers
 WITH ENCRYPTION
 AS
-	SELECT CustID AS CustomerID, FirstName + ' ' + LastName AS FullName, Gender, EmailAddress, ResidentialAddres
+	SELECT CustID AS CustomerID, FirstName + ' ' + LastName AS FullName, IIF(Gender = 1, 'Male', 'Female') AS Gender, EmailAddress, ResidentialAddres
 	FROM Customer.Customers;
 GO
 
